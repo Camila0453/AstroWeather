@@ -10,7 +10,7 @@
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
      <script defer type="text/javascript" src="js/app.js"></script> 
     <title>WeatherApp - AstroWeather</title>
-    <link rel="stylesheet" href="./css/style.css">
+   <!---<link rel="stylesheet" href="./css/style.css"> --> 
     <style>
         body {
             background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
@@ -157,18 +157,13 @@
       <div class="col-sm-3">
         <input oninput=""  type="date"  class="form-control form-control-sm" id="datoFecha" name="datoFecha" placeholder="Seleccione una fecha">
       </div>
-       <label for="colFormLabelSm" class="col-sm-1 col-form-label col-form-label-sm">Fecha Fin</label>
+       <label for="colFormLabelSm" type="time" class="col-sm-1 col-form-label col-form-label-sm">Hora</label>
       <div class="col-sm-3">
         <input oninput=""  type="date"  class="form-control form-control-sm" id="datoUbi" name="datoUbi" placeholder="Seleccione una fecha">
       </div> 
-      <label for="colFormLabelSm" class="col-sm-1 col-form-label col-form-label-sm">Hora</label>
-       <div class="col-sm-3">
-      <input oninput=""  type="time"  class="form-control form-control-sm" id="hora" name="hora" placeholder="Seleccione una hora">
-      </div> 
      </div>
-     <a class="btn btn-dark" href="<?= ?>" > 
-     "https://api.meteomatics.com/2025-10-20T00:00:00ZP1D:PT1H/t_2m:C,relative_humidity_2m:p/47.4245,9.3767/html?model=mix&request_type=GET">Buscar</a>
-     
+     <a class="btn btn-dark" id="linkBus" href="#" >buscar</a>
+   
     </form>
 
     <span>
@@ -184,6 +179,8 @@
 precipitaciones, viento, temperaturas, entre otras. Se dan condiciones típicas de un lugar y hora en especifico según las estadísticas que ayudan a poder estimar con un tiempo aproximado de 1 año a partir de la fecha actual.  <br> 
 A continuación se inlcuyen recursos presentes en este sistema web </p>
     </div>
+
+    
 
   <footer>
     <small>NASA Space Apps Challenge - Comodoro Rivadavia</small>

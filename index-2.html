@@ -4,19 +4,26 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Astro Weather</title>
-  <link rel="icon" type="image/png" href="img/logo.png" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link rel="stylesheet" href="dashboard.css" type="text/css">
+  <!-- Favicon con tu logo -->
+  <link rel="icon" type="image/png" href="img/logo.png" />
   <style>
     :root{
       --astro-primary:#0ea5e9;
       --astro-deep:#0b132b;
+      scroll-behavior: smooth;
     }
+
+
     body{ background-color:#0b0f19; color:#e5e7eb; }
 
     .hero{
       position:relative;
       min-height:100vh;
-      background-image: url('img/bg.png');
+      background-image: url('img/bg.png'); /* tu fondo */
       background-size:cover; background-position:center; background-repeat:no-repeat;
       display:flex; align-items:center; justify-content:center;
       overflow:hidden;
@@ -30,16 +37,6 @@
       border-bottom:1px solid rgba(255,255,255,.08);
     }
 
-    .brand-mark{
-      width:38px; height:38px; border-radius:50%;
-      background: conic-gradient(from 220deg at 60% 40%, #8ef, #37f 30%, #0ea5e9 60%, #8ef);
-      position:relative; margin-right:.6rem;
-    }
-    .brand-mark::after{
-      content:""; position:absolute; inset:8px; border-radius:50%; background:#fff;
-      box-shadow:-10px -10px 0 0 #0ea5e9 inset;
-    }
-
     .hero-title{ font-weight:800; letter-spacing:.04em; text-shadow:0 6px 24px rgba(0,0,0,.55); }
     .hero-sub{ opacity:.95 }
 
@@ -51,11 +48,10 @@
     section{ padding:80px 0; }
   </style>
 </head>
-<body>
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-glass">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" href="#inicio">
-        <img src="img/logo.png" alt="logo" class="img-fluid w-50">
+        <img src="img/logo.png" alt="logo" class="img-fluid" style="max-height:42px;">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -82,7 +78,7 @@
           <h1 class="display-3 hero-title">ASTRO WEATHER</h1>
           <p class="lead hero-sub">Aplicación de sistema meteorológico a futuro</p>
           <div class="d-flex gap-3 justify-content-center mt-4">
-            <a href="#clima" class="btn btn-astro btn-lg">Ver clima</a>
+            <a href="#clima" class="btn btn-astro btn-lg">Ver Clima</a>
             <a href="#sobre" class="btn btn-outline-light btn-lg">Conócenos</a>
           </div>
         </div>
@@ -90,33 +86,35 @@
     </div>
   </header>
 
-  <section id="clima">
+  <!-- NUEVA SECCIÓN: Buscador + Calendario (reemplaza la anterior del medio) -->
+  <section id="clima" class="d-flex" >
     <div class="container">
-      <div class="row g-4 align-items-stretch">
-        <div class="col-lg-4">
-          <div class="card bg-dark text-white h-100">
-            <div class="card-body">
-              <h5 class="card-title">Pronóstico</h5>
-              <p class="card-text">Integraremos datos de múltiples satélites para ofrecer pronósticos hiperlocales a 7 días.</p>
-              <a href="#" class="btn btn-outline-light">Explorar</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          <div class="card bg-dark text-white h-100">
-            <div class="card-body">
-              <h5 class="card-title">Alertas</h5>
-              <p class="card-text">Recibe notificaciones de tormentas, calor extremo y calidad del aire en tiempo real.</p>
-              <a href="#" class="btn btn-outline-light">Activar</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          <div class="card bg-dark text-white h-100">
-            <div class="card-body">
-              <h5 class="card-title">Mapas</h5>
-              <p class="card-text">Visualiza frentes, presión y nubosidad con mapas interactivos de alta resolución.</p>
-              <a href="#" class="btn btn-outline-light">Abrir mapas</a>
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+          <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+            <div class="card-body p-4 p-md-5 bg-dark text-white">
+              <form class="row g-3 align-items-end" id="form-busqueda">
+                <!-- Buscador -->
+                <div class="col-12 col-md-7">
+                  <label for="q" class="form-label">Buscar ciudad o ubicación</label>
+                  <div class="input-group input-group-lg">
+                    <span class="input-group-text bg-secondary-subtle">🔎</span>
+                    <input type="search" class="form-control" id="q" name="q" placeholder="Ej: Buenos Aires, AR" autocomplete="off" />
+                  </div>
+                </div>
+                <!-- Calendario (fecha) -->
+                <div class="col-12 col-md-3">
+                  <label for="fecha" class="form-label">Fecha</label>
+                  <input type="date" class="form-control form-control-lg" id="fecha" name="fecha" />
+                </div>
+                <!-- Botón -->
+                <div class="col-12 col-md-2 d-grid">
+                  <button class="btn btn-astro btn-lg" type="submit">Buscar</button>
+                </div>
+              </form>
+
+              <!-- Chips de ubicaciones recientes -->
+              <div class="d-flex flex-wrap gap-2 mt-3" id="recientes" aria-live="polite"></div>
             </div>
           </div>
         </div>
@@ -146,13 +144,83 @@
     </div>
   </section>
 
+  <div class="dashboard">
+    <h1>
+      <span class="icon">🌤️</span>
+      Deportes y Clima
+    </h1>
+    <div class="card">
+      <label for="deporte">Selecciona un deporte:</label>
+      <select id="deporte">
+        <option value="futbol">Fútbol</option>
+        <option value="tenis">Tenis</option>
+        <option value="ciclismo">Ciclismo</option>
+        <option value="natacion">Natación</option>
+      </select>
+      <button id="consultar">
+        <span class="icon-btn">🔍</span> Consultar clima
+      </button>
+      <div id="resultado" class="resultado"></div>
+    </div>
+  </div>
+  <footer>
+  
+
   <footer class="py-4 text-center text-white-50 border-top border-light-subtle">
     <small>© <span id="y"></span> Astro Weather</small>
   </footer>
 
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
+
+    // --- Lógica mínima del buscador ---
+    const form = document.getElementById('form-busqueda');
+    const recientes = document.getElementById('recientes');
+    const key = 'aw_recientes';
+
+    function renderRecientes(){
+      const list = JSON.parse(localStorage.getItem(key) || '[]');
+      recientes.innerHTML = '';
+      list.slice(-6).reverse().forEach(txt=>{
+        const b = document.createElement('button');
+        b.type='button'; b.className='btn btn-sm btn-outline-light rounded-pill';
+        b.textContent=txt; b.onclick=()=>{ document.getElementById('q').value=txt; };
+        recientes.appendChild(b);
+      });
+      if(list.length){
+        const label = document.createElement('span');
+        label.className='text-white-50 small me-2'; label.textContent='Recientes:';
+        recientes.prepend(label);
+      }
+    }
+
+    form?.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const ciudad = document.getElementById('q').value.trim();
+      const fecha = document.getElementById('fecha').value;
+      if(!ciudad) return;
+
+      // Guardar como reciente
+      const list = JSON.parse(localStorage.getItem(key) || '[]');
+      if(!list.includes(ciudad)) list.push(ciudad);
+      localStorage.setItem(key, JSON.stringify(list));
+      renderRecientes();
+
+      // Aquí conectás tu API real:
+      // fetch(`/js/conexionApi?city=${encodeURIComponent(ciudad)}&date=${fecha}`)
+      //   .then(r=>r.json()).then(data=>{ /* renderizar resultados */ });
+
+      alert(`Buscar: ${ciudad}\nFecha: ${fecha || 'hoy'}`); // quitalo cuando integres la API
+    });
+
+    renderRecientes();
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""
+></script>
+
 </body>
 </html>
