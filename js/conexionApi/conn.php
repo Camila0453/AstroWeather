@@ -1,0 +1,3 @@
+<?php
+
+https://api.meteomatics.com/<validdatetime>/<parameters>/<location>/<format>?<optionals>

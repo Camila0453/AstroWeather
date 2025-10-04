@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+    
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+     <script defer type="text/javascript" src="js/app.js"></script> 
+    <title>WeatherApp - AstroWeather</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        .weather-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 1200px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .weather-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .weather-icon {
+            font-size: 80px;
+            color: #f39c12;
+        }
+        .temperature {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #f39c12;
+            margin: 0;
+        }
+        .weather-description {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .weather-details {
+            background: rgba(116, 185, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .forecast-card {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .forecast-day {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .forecast-icon {
+            font-size: 40px;
+            margin: 15px 0;
+        }
+        .hourly-forecast {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .search-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            width: 300px;
+        }
+        .search-input {
+            border: none;
+            background: transparent;
+            flex: 1;
+            padding: 5px;
+            outline: none;
+        }
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0984e3;
+        }
+        .temp-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid #fff;
+            border-radius: 25px;
+            padding: 5px 15px;
+            margin: 0 5px;
+            color: #333;
+        }
+        .temp-toggle.active {
+            background: #0984e3;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <!-- Logo a la izquierda -->
+          <a class="navbar-brand" href="#">
+            <img src="./img/logo.png" alt="" width="auto" height="40" class="d-inline-block align-text-top">
+          
+          </a>
+    
+          <!-- Botón para colapsar en mobile -->
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+    
+          <!-- Ítems de navegación a la derecha -->
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Servicios</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Contacto</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+
+    <br> <br><br><!--cambiar, temporal-->
+    <form id="formTiempo" class="form-label"  method="POST" action="" enctype="multipart/form-data">
+     <div class="form-group row">
+       <label for="colFormLabelSm" class="col-sm-1 col-form-label col-form-label-sm">Fecha Inicio</label>
+      <div class="col-sm-3">
+        <input oninput=""  type="date"  class="form-control form-control-sm" id="datoFecha" name="datoFecha" placeholder="Seleccione una fecha">
+      </div>
+       <label for="colFormLabelSm" class="col-sm-1 col-form-label col-form-label-sm">Fecha Fin</label>
+      <div class="col-sm-3">
+        <input oninput=""  type="date"  class="form-control form-control-sm" id="datoUbi" name="datoUbi" placeholder="Seleccione una fecha">
+      </div> 
+      <label for="colFormLabelSm" class="col-sm-1 col-form-label col-form-label-sm">Hora</label>
+       <div class="col-sm-3">
+      <input oninput=""  type="time"  class="form-control form-control-sm" id="hora" name="hora" placeholder="Seleccione una hora">
+      </div> 
+     </div>
+     <a class="btn btn-dark" href="<?= ?>" > 
+     "https://api.meteomatics.com/2025-10-20T00:00:00ZP1D:PT1H/t_2m:C,relative_humidity_2m:p/47.4245,9.3767/html?model=mix&request_type=GET">Buscar</a>
+     
+    </form>
+
+    <span>
+        <h2>Sobre Nosotros</h2>
+        <p>hola
+          
+        </p>
+        </span>
+    <div>
+      <h2>Fuentes de Recursos</h2>
+      <p>Para realizar este desafío se utilizó información propuesta por NASA International Space Apps Challenge.
+      Dicha información consta de datos meteorológicos globales que han sido recopilados por la NASA por varios años, dentro de los datos se pueden encontran
+precipitaciones, viento, temperaturas, entre otras. Se dan condiciones típicas de un lugar y hora en especifico según las estadísticas que ayudan a poder estimar con un tiempo aproximado de 1 año a partir de la fecha actual.  <br> 
+A continuación se inlcuyen recursos presentes en este sistema web </p>
+    </div>
+
+  <footer>
+    <small>NASA Space Apps Challenge - Comodoro Rivadavia</small>
+    </footer>
+</body>
+</html>
+</html>
